@@ -1,91 +1,117 @@
-three.js
-========
+# three.js 🚀
 
-[![NPM Package][npm]][npm-url]
-[![Build Size][build-size]][build-size-url]
-[![NPM Downloads][npm-downloads]][npmtrends-url]
-[![Dev Dependencies][dev-dependencies]][dev-dependencies-url]
-[![Language Grade][lgtm]][lgtm-url]
+## 📖 Описание
 
-#### JavaScript 3D library ####
+**three.js** — это популярная кросс-браузерная JavaScript-библиотека и API для создания и отображения анимированной 3D-графики в веб-браузерах. Проект предоставляет мощные инструменты для работы с WebGL, позволяя разработчикам создавать интерактивные 3D-сцены, игры, визуализации данных и другие графические приложения.
 
-The aim of the project is to create an easy to use, lightweight, 3D library with a default WebGL renderer. The library also provides Canvas 2D, SVG and CSS3D renderers in the examples.
+## 🛠 Технологический стек
 
-[Examples](http://threejs.org/examples/) &mdash;
-[Documentation](http://threejs.org/docs/) &mdash;
-[Wiki](https://github.com/mrdoob/three.js/wiki) &mdash;
-[Migrating](https://github.com/mrdoob/three.js/wiki/Migration-Guide) &mdash;
-[Questions](http://stackoverflow.com/questions/tagged/three.js) &mdash;
-[Forum](https://discourse.threejs.org/) &mdash;
-[Slack](https://join.slack.com/t/threejs/shared_invite/enQtMzYxMzczODM2OTgxLTQ1YmY4YTQxOTFjNDAzYmQ4NjU2YzRhNzliY2RiNDEyYjU2MjhhODgyYWQ5Y2MyZTU3MWNkOGVmOGRhOTQzYTk) &mdash;
-[Discord](https://discordapp.com/invite/HF4UdyF)
+- **Язык**: JavaScript (ES6+)
+- **Типизация**: TypeScript (файлы `.d.ts`)
+- **Графика**: WebGL, WebXR (VR/AR)
+- **Сборка**: Rollup, npm
+- **Тестирование**: Puppeteer, Mocha (unit-тесты)
+- **Форматы данных**: glTF, OBJ, FBX, COLLADA, STL и другие
 
-### Usage ###
+## 📦 Установка и запуск
 
-This code creates a scene, a camera, and a geometric cube, and it adds the cube to the scene. It then creates a `WebGL` renderer for the scene and camera, and it adds that viewport to the `document.body` element. Finally, it animates the cube within the scene for the camera.
+### Установка через npm
+
+```bash
+npm install three
+```
+
+### Подключение через CDN
+
+```html
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+```
+
+### Локальный запуск проекта
+
+```bash
+# Клонирование репозитория
+git clone https://github.com/mrdoob/three.js.git
+cd three.js
+
+# Установка зависимостей
+npm install
+
+# Запуск dev-сервера для примеров
+npm start
+```
+
+## 💻 Примеры использования
+
+### Базовый пример — создание 3D-сцены
 
 ```javascript
-import * as THREE from 'js/three.module.js';
+import * as THREE from 'three';
 
-var camera, scene, renderer;
-var geometry, material, mesh;
+// Создание сцены
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+const renderer = new THREE.WebGLRenderer();
 
-init();
-animate();
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
 
-function init() {
+// Добавление объекта
+const geometry = new THREE.BoxGeometry();
+const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+const cube = new THREE.Mesh(geometry, material);
+scene.add(cube);
 
-	camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 0.01, 10 );
-	camera.position.z = 1;
+camera.position.z = 5;
 
-	scene = new THREE.Scene();
-
-	geometry = new THREE.BoxGeometry( 0.2, 0.2, 0.2 );
-	material = new THREE.MeshNormalMaterial();
-
-	mesh = new THREE.Mesh( geometry, material );
-	scene.add( mesh );
-
-	renderer = new THREE.WebGLRenderer( { antialias: true } );
-	renderer.setSize( window.innerWidth, window.innerHeight );
-	document.body.appendChild( renderer.domElement );
-
-}
-
+// Анимация
 function animate() {
-
-	requestAnimationFrame( animate );
-
-	mesh.rotation.x += 0.01;
-	mesh.rotation.y += 0.02;
-
-	renderer.render( scene, camera );
-
+    requestAnimationFrame(animate);
+    cube.rotation.x += 0.01;
+    cube.rotation.y += 0.01;
+    renderer.render(scene, camera);
 }
+animate();
 ```
 
-If everything went well, you should see [this](https://jsfiddle.net/8kubjpL5/).
+### Загрузка 3D-модели (glTF)
 
-### Cloning this repository ###
+```javascript
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
-Cloning the repo with all its history results in a ~2GB download. If you don't need the whole history you can use the `depth` parameter to significantly reduce download size.
-
-```sh
-git clone --depth=1 https://github.com/mrdoob/three.js.git
+const loader = new GLTFLoader();
+loader.load('model.gltf', (gltf) => {
+    scene.add(gltf.scene);
+});
 ```
 
-### Change log ###
+## 📁 Структура проекта
 
-[Releases](https://github.com/mrdoob/three.js/releases)
+| Директория | Описание |
+|------------|----------|
+| `build/` | Собранные файлы библиотеки (three.js, three.min.js, three.module.js) |
+| `docs/` | Документация API, руководства и примеры (en/zh) |
+| `editor/` | Визуальный редактор для создания 3D-сцен |
+| `examples/` | Более 300 примеров использования библиотеки |
+| `src/` | Исходный код библиотеки (модульная структура) |
+| `test/` | Модульные и e2e-тесты |
+| `utils/` | Утилиты для сборки и конвертации моделей |
+| `files/` | Статические ресурсы (шрифты, иконки, стили) |
 
+### Ключевые модули `src/`
 
-[npm]: https://img.shields.io/npm/v/three
-[npm-url]: https://www.npmjs.com/package/three
-[build-size]: https://badgen.net/bundlephobia/minzip/three
-[build-size-url]: https://bundlephobia.com/result?p=three
-[npm-downloads]: https://img.shields.io/npm/dw/three
-[npmtrends-url]: https://www.npmtrends.com/three
-[dev-dependencies]: https://img.shields.io/david/dev/mrdoob/three.js
-[dev-dependencies-url]: https://david-dm.org/mrdoob/three.js#info=devDependencies
-[lgtm]: https://img.shields.io/lgtm/alerts/github/mrdoob/three.js
-[lgtm-url]: https://lgtm.com/projects/g/mrdoob/three.js/
+- **animation/** — система анимации (клипы, микшеры, треки)
+- **cameras/** — типы камер (перспективная, ортографическая)
+- **core/** — базовые классы (Object3D, BufferGeometry, Raycaster)
+- **geometries/** — геометрические примитивы (Box, Sphere, Torus и др.)
+- **lights/** — источники света (Ambient, Directional, Point, Spot)
+- **loaders/** — загрузчики форматов (glTF, OBJ, FBX и др.)
+- **materials/** — материалы (Basic, Lambert, Phong, Standard, Physical)
+- **math/** — математические классы (Vector2/3/4, Matrix3/4, Quaternion)
+- **objects/** — 3D-объекты (Mesh, Line, Points, Sprite, Group)
+- **renderers/** — рендереры (WebGLRenderer, WebGLRenderTarget)
+- **textures/** — текстуры (Texture, CubeTexture, VideoTexture)
+
+## 📄 Лицензия
+
+Проект распространяется под лицензией **MIT**. Подробности см. в файле [LICENSE](LICENSE).
